@@ -57,20 +57,23 @@ class AuthModal(ctk.CTkToplevel):
         
     def save_anthropic(self):
         set_api_key("anthropic", self.ant_key.get())
-        if self.callbacks: self.callbacks()
+        if self.callbacks:
+            self.callbacks()
         self.destroy()
-        
+
     def save_openai(self):
         set_api_key("openai", self.oai_key.get())
-        if self.callbacks: self.callbacks()
+        if self.callbacks:
+            self.callbacks()
         self.destroy()
-        
+
     def save_sub(self):
         try:
             login(self.sub_user.get(), self.sub_pass.get())
-            if self.callbacks: self.callbacks()
+            if self.callbacks:
+                self.callbacks()
             self.destroy()
-        except:
+        except Exception:
             pass
 
 class BetterCodeApp(ctk.CTk):
@@ -189,7 +192,8 @@ class BetterCodeApp(ctk.CTk):
         
     def handle_send(self, event=None):
         text = self.chat_input.get().strip()
-        if not text: return
+        if not text:
+            return
         
         if not self.current_workspace_id:
             self.append_chat("system", "Please select a workspace first.")

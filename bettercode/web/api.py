@@ -37,7 +37,6 @@ from bettercode.auth import delete_api_key, get_api_key, get_proxy_token, login,
 from bettercode.context import (
     CodeReview,
     Message,
-    MemoryEntry,
     RouterTelemetry,
     SessionLocal,
     Workspace,
@@ -62,11 +61,11 @@ from bettercode.web.artifact_ops import (
     open_generated_file_payload as _open_generated_file_payload_base,
     open_telemetry_log_payload as _open_telemetry_log_payload_base,
 )
-from bettercode.web.bootstrap import _require_selector_for_app_startup, _start_selector_warmup
+from bettercode.web.bootstrap import _require_selector_for_app_startup, _start_selector_warmup  # noqa: F401
 from bettercode.web.chat_processes import (
+    ACTIVE_CHAT_PROCESS_META,  # noqa: F401
+    ACTIVE_CHAT_PROCESS_META_LOCK,  # noqa: F401
     ACTIVE_CHAT_PROCESSES,
-    ACTIVE_CHAT_PROCESS_META,
-    ACTIVE_CHAT_PROCESS_META_LOCK,
     ACTIVE_CHAT_PROCESSES_LOCK,
     PENDING_CHAT_INPUT,
     PENDING_CHAT_INPUT_LOCK,
@@ -86,7 +85,6 @@ from bettercode.web.chat_context import (
     _manual_task_analysis as _manual_task_analysis_base,
 )
 from bettercode.web.generated_paths import (
-    GENERATED_FILES_DIRNAME,
     _bettercode_home_dir,
     _resolve_generated_file_path,
     _workspace_generated_dir,
@@ -142,7 +140,7 @@ from bettercode.router.selector import (
     stop_managed_ollama,
     suggest_follow_up_recommendations,
 )
-from bettercode.updater import check_for_updates, normalize_sha256, normalize_update_platform
+from bettercode.updater import normalize_sha256, normalize_update_platform
 
 STATIC_DIR = Path(__file__).with_name("static")
 

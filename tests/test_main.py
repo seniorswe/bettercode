@@ -1,6 +1,5 @@
 from unittest.mock import Mock
 import plistlib
-from pathlib import Path
 
 import bettercode.main as main_module
 

@@ -16,13 +16,12 @@ from bettercode.app_meta import (
     APP_BUNDLE_ID,
     APP_ICON_PATH,
     APP_ICON_PNG_PATH,
-    APP_ICNS_PATH,
     APP_NAME,
     APP_SLUG,
     APP_TRAY_ICON_PATH,
 )
 from .api import create_app
-from .bootstrap import _start_selector_runtime_warmup, _warm_selector_runtime_best_effort
+from .bootstrap import _start_selector_runtime_warmup, _warm_selector_runtime_best_effort  # noqa: F401
 
 
 class EmbeddedServer(uvicorn.Server):
