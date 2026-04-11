@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- Dark background + light // — used on light themes -->
+  <rect x="14" y="14" width="228" height="228" rx="52" fill="#0F172A" stroke="#94A3B8" stroke-opacity="0.18" stroke-width="2.5"/>
+  <line x1="89" y1="176" x2="132" y2="80" stroke="#F8FAFC" stroke-width="22" stroke-linecap="round"/>
+  <line x1="127" y1="176" x2="170" y2="80" stroke="#F8FAFC" stroke-width="22" stroke-linecap="round"/>
+</svg>

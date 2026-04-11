@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BetterCode</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/app-icon.svg">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <link rel="stylesheet" href="/assets/xterm.css">
+</head>
+<body>
+  <div class="app-shell">
+
+    <aside class="sidebar">
+
+      <div class="sidebar-header" data-window-drag-region="true">
+        <div id="sidebar-window-row" class="sidebar-window-row" aria-hidden="true"></div>
+        <div class="brand-row">
+          <div class="brand-lockup">
+            <img src="/assets/app-icon-light.svg" class="brand-icon" data-theme-logo width="22" height="22" alt="" aria-hidden="true">
+            <h1>BetterCode</h1>
+          </div>
+          <button class="icon-button" id="global-settings-button" aria-label="Open settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3"/><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-section project-section">
+        <div class="section-header">
+          <span class="section-title" id="projects-section-title">Projects</span>
+          <button class="icon-button" id="project-add-button" aria-label="Add project">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+        <div id="workspace-rail" class="workspace-rail"></div>
+      </div>
+
+      <div class="sidebar-section review-section">
+        <div class="section-header">
+          <button type="button" class="section-nav-button" id="review-open-button" aria-label="Open code review">
+            <span class="section-header-left">
+              <svg class="section-header-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <path d="M14 2v6h6" />
+                <path d="M8 13h8" />
+                <path d="M8 17h6" />
+              </svg>
+              <span class="section-title" id="review-section-title">Code Review</span>
+            </span>
+          </button>
+        </div>
+        <div id="review-panel" class="review-panel"></div>
+      </div>
+
+      <div class="sidebar-section git-section collapsed">
+        <div class="section-header">
+          <button type="button" class="git-collapse-btn" id="git-collapse-button" aria-label="Toggle git panel" aria-expanded="false">
+            <span class="section-header-left">
+              <svg class="section-header-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M6 3v12" />
+                <path d="M18 9a9 9 0 0 1-9 9" />
+                <circle cx="18" cy="6" r="3" />
+                <circle cx="6" cy="18" r="3" />
+              </svg>
+              <span class="section-title" id="git-section-title">Git</span>
+            </span>
+            <span class="git-collapse-caret"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </button>
+          <div class="inline-actions">
+            <button class="icon-button" id="git-refresh-button" aria-label="Refresh git status">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-3.14"/></svg>
+            </button>
+            <button class="icon-button" id="git-menu-button" aria-label="More git actions">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+            </button>
+          </div>
+        </div>
+        <div id="git-panel" class="git-panel"></div>
+      </div>
+
+      <div class="sidebar-version">
+        <span id="app-version">v0.0.0</span>
+        <div class="sidebar-version-actions">
+          <button type="button" id="theme-toggle-button" class="icon-button theme-toggle-btn" aria-label="Toggle dark/light mode" title="Toggle dark/light mode">
+            <svg class="theme-toggle-icon theme-toggle-icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="theme-toggle-icon theme-toggle-icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+    <main class="main-shell">
+
+      <section id="chat-view" class="view active">
+        <header class="topbar" data-window-drag-region="true">
+          <div class="chat-topbar-main">
+            <h2 id="workspace-title">Loading</h2>
+            <div id="workspace-tabs" class="workspace-tabs"></div>
+          </div>
+          <div class="topbar-actions">
+            <!-- App updates are temporarily disabled for this release. -->
+            <button class="secondary-button" id="tab-history-button" type="button">Tab History</button>
+            <div id="run-pill" class="run-pill hidden">
+              <button type="button" id="run-pill-open" class="run-pill-body" aria-label="Show run output">
+                <span class="run-pill-dot"></span>
+                <span class="run-pill-label" id="run-pill-label">Running</span>
+              </button>
+              <button type="button" id="run-pill-dismiss" class="run-pill-action hidden" aria-label="Dismiss">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <div class="run-button-group" id="run-button-group">
+              <button class="secondary-button run-button-shell" id="run-button" type="button">
+                <span class="run-button-label">Run</span>
+                <span class="run-button-divider" aria-hidden="true"></span>
+                <span class="run-button-gear-wrap">
+                  <span class="icon-button run-settings-gear" id="run-settings-button" aria-label="Run settings" role="button" tabindex="0">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3"/><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/></svg>
+                  </span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <section id="messages" class="messages"></section>
+        <section id="live-status-panel" class="composer-live hidden" aria-live="polite"></section>
+
+        <form id="chat-form" class="composer">
+          <div class="composer-toolbar">
+              <div class="model-picker-row">
+                <div class="model-picker" id="model-picker">
+                  <div class="composer-field-label" id="composer-model-label">Model</div>
+                  <button type="button" id="model-picker-button" class="model-picker-button"
+                        aria-haspopup="listbox" aria-expanded="false">
+                  <span id="model-picker-label">Loading models…</span>
+                  <span class="model-picker-caret"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg></span>
+                </button>
+                <div id="model-picker-menu" class="model-picker-menu hidden"
+                     role="listbox" aria-label="Select model"></div>
+              </div>
+              <div class="model-cap hidden" id="agent-mode-cap">
+                <div class="composer-field-label" id="composer-mode-label">Mode</div>
+                <div class="mode-picker" id="mode-picker">
+                  <button type="button" id="mode-picker-button" class="model-picker-button"
+                          aria-haspopup="listbox" aria-expanded="false">
+                    <span id="mode-picker-label"></span>
+                    <span class="model-picker-caret"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </button>
+                  <div id="mode-picker-menu" class="model-picker-menu hidden"
+                       role="listbox" aria-label="Select agent mode"></div>
+                </div>
+              </div>
+            </div>
+            <div class="inline-actions">
+              <input id="chat-attachment-input" type="file" class="hidden-input" multiple>
+              <button id="attach-button" type="button" class="secondary-button">Attach</button>
+            </div>
+          </div>
+          <div id="attachment-list" class="attachment-list"></div>
+          <textarea id="chat-input" placeholder="Write an instruction…" spellcheck="true" autocorrect="on" autocapitalize="sentences"></textarea>
+          <div id="slash-command-menu" class="slash-command-menu hidden" role="listbox" aria-label="Available commands"></div>
+          <div class="composer-row">
+            <div id="composer-hint" class="composer-hint">Validate changes with the code reviewer and a manual review.</div>
+            <div class="inline-actions">
+              <button id="chat-stop-button" type="button" class="secondary-button hidden">Stop</button>
+              <button id="send-button" type="submit" class="secondary-button">Send</button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <section id="review-view" class="view">
+        <header class="topbar review-topbar" data-window-drag-region="true">
+          <div class="review-topbar-left">
+            <div class="topbar-label" id="review-topbar-label">Code Review</div>
+            <div id="review-project-picker-bar"></div>
+          </div>
+          <div class="topbar-actions">
+            <!-- App updates are temporarily disabled for this release. -->
+            <button class="secondary-button" id="review-open-chat-button" type="button">Run Review</button>
+          </div>
+        </header>
+
+        <section id="review-view-body" class="review-view-body"></section>
+      </section>
+
+
+      <section id="settings-view" class="view">
+        <header class="topbar" data-window-drag-region="true">
+          <div>
+            <div class="topbar-label" id="settings-topbar-label">Settings</div>
+            <h2 id="settings-topbar-title">Configuration</h2>
+          </div>
+          <div class="topbar-actions">
+            <!-- App updates are temporarily disabled for this release. -->
+            <button class="icon-button" id="settings-close-button" aria-label="Close settings">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="settings-shell">
+          <nav class="settings-tabs" role="tablist" aria-label="Settings sections">
+            <button id="settings-tab-appearance" class="settings-tab active" type="button" role="tab" aria-controls="settings-appearance" aria-selected="true" tabindex="0" data-settings-target="settings-appearance">Appearance</button>
+            <button id="settings-tab-models" class="settings-tab" type="button" role="tab" aria-controls="settings-models" aria-selected="false" tabindex="-1" data-settings-target="settings-models">CLI Models</button>
+            <button id="settings-tab-performance" class="settings-tab" type="button" role="tab" aria-controls="settings-performance" aria-selected="false" tabindex="-1" data-settings-target="settings-performance">Performance</button>
+          </nav>
+
+          <div class="settings-panels">
+
+            <section id="settings-appearance" class="settings-panel active" role="tabpanel" aria-labelledby="settings-tab-appearance" aria-hidden="false" tabindex="0">
+              <div class="panel-header">
+                <div>
+                  <h3 id="appearance-panel-title">Appearance</h3>
+                  <p class="panel-copy" id="appearance-panel-copy">Theme and sizing controls for the desktop shell.</p>
+                </div>
+              </div>
+
+              <div class="settings-block">
+                <div class="settings-block-header">
+                  <div class="connect-title" id="language-settings-title">Language</div>
+                  <div class="connect-copy" id="language-settings-copy">Choose the human language BetterCode uses in the app and in model responses.</div>
+                </div>
+                <div class="settings-field-grid">
+                  <div class="settings-field">
+                    <label class="font-size-label" for="settings-human-language" id="settings-human-language-label">Human Language</label>
+                    <select id="settings-human-language" class="composer-select settings-select" aria-label="Human language"></select>
+                    <div class="connect-copy" id="settings-human-language-help">BetterCode will keep code and filenames unchanged, but UI text and AI responses will switch to this language.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings-block">
+                <div class="settings-block-header">
+                  <div class="connect-title" id="theme-settings-title">Theme</div>
+                  <div class="connect-copy" id="theme-settings-copy">Interface appearance.</div>
+                </div>
+                <div class="theme-switcher" role="tablist" aria-label="Theme selection">
+                  <button type="button" class="theme-option" data-theme-option="dark">Dark</button>
+                  <button type="button" class="theme-option" data-theme-option="midnight">Midnight</button>
+                  <button type="button" class="theme-option" data-theme-option="light">Light</button>
+                  <button type="button" class="theme-option" data-theme-option="dawn">Dawn</button>
+                  <button type="button" class="theme-option" data-theme-option="sage">Sage</button>
+                </div>
+              </div>
+
+              <div class="settings-block">
+                <div class="settings-block-header">
+                  <div class="connect-title" id="font-size-settings-title">Font Size</div>
+                  <div class="connect-copy" id="font-size-settings-copy">Adjust the interface font size.</div>
+                </div>
+                <div class="font-size-control">
+                  <div class="font-size-header">
+                    <span class="font-size-label" id="font-size-scale-label">Scale</span>
+                    <span class="font-size-current" id="font-size-current">Medium</span>
+                  </div>
+                  <input id="font-size-slider" type="range" min="0" max="3" step="1" value="2" aria-label="Font size">
+                  <div class="font-size-scale" aria-hidden="true">
+                    <span data-size="extra-small">XS</span>
+                    <span data-size="small">SM</span>
+                    <span data-size="medium">MD</span>
+                    <span data-size="large">LG</span>
+                  </div>
+                </div>
+              </div>
+
+            </section>
+
+            <section id="settings-models" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-models" aria-hidden="true" tabindex="0">
+              <div class="panel-header">
+                <div>
+                  <h3>CLI Models</h3>
+                  <p class="panel-copy">BetterCode uses installed coding CLIs from this machine. Only tools that are installed and configured with a login or API key appear in the model picker.</p>
+                </div>
+              </div>
+
+              <div class="connect-grid">
+
+                <article class="connect-card">
+                  <div>
+                    <div class="connect-title">Codex CLI</div>
+                    <div class="connect-copy">Uses your local <code>codex</code> install, login session, and model access.</div>
+                    <div class="runtime-access" id="codex-runtime-access">Checking access…</div>
+                  </div>
+                  <div class="card-actions">
+                    <div class="runtime-status" id="codex-runtime-status">Checking…</div>
+                    <div class="inline-actions runtime-action-row">
+                      <button type="button" class="secondary-button runtime-login-button" data-runtime="codex">Login</button>
+                      <button type="button" class="secondary-button auth-open-button" data-provider="openai">Add Key</button>
+                      <button type="button" class="secondary-button runtime-logout-button hidden" data-runtime="codex">Logout</button>
+                      <button type="button" class="secondary-button runtime-install-button" data-runtime="codex">Install</button>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="connect-card">
+                  <div>
+                    <div class="connect-title">Cursor CLI</div>
+                    <div class="connect-copy">Uses your local <code>cursor-agent</code> install with browser login or a saved Cursor API key.</div>
+                    <div class="runtime-access" id="cursor-runtime-access">Checking access…</div>
+                  </div>
+                  <div class="card-actions">
+                    <div class="runtime-status" id="cursor-runtime-status">Checking…</div>
+                    <div class="inline-actions runtime-action-row">
+                      <button type="button" class="secondary-button runtime-login-button" data-runtime="cursor">Login</button>
+                      <button type="button" class="secondary-button auth-open-button" data-provider="cursor">Add Key</button>
+                      <button type="button" class="secondary-button runtime-logout-button hidden" data-runtime="cursor">Logout</button>
+                      <button type="button" class="secondary-button runtime-install-button" data-runtime="cursor">Install</button>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="connect-card">
+                  <div>
+                    <div class="connect-title">Claude CLI</div>
+                    <div class="connect-copy">Uses your local <code>claude</code> install with terminal login or a saved Anthropic API key.</div>
+                    <div class="runtime-access" id="claude-runtime-access">Checking access…</div>
+                  </div>
+                  <div class="card-actions">
+                    <div class="runtime-status" id="claude-runtime-status">Checking…</div>
+                    <div class="inline-actions runtime-action-row">
+                      <button type="button" class="secondary-button runtime-login-button" data-runtime="claude">Login</button>
+                      <button type="button" class="secondary-button auth-open-button" data-provider="anthropic">Add Key</button>
+                      <button type="button" class="secondary-button runtime-logout-button hidden" data-runtime="claude">Logout</button>
+                      <button type="button" class="secondary-button runtime-install-button" data-runtime="claude">Install</button>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="connect-card">
+                  <div>
+                    <div class="connect-title">Gemini CLI</div>
+                    <div class="connect-copy">Uses your local Gemini CLI and its Google-authenticated session when available.</div>
+                    <div class="runtime-access" id="gemini-runtime-access">Checking access…</div>
+                  </div>
+                  <div class="card-actions">
+                    <div class="runtime-status" id="gemini-runtime-status">Checking…</div>
+                    <div class="inline-actions runtime-action-row">
+                      <button type="button" class="secondary-button runtime-login-button" data-runtime="gemini">Login</button>
+                      <button type="button" class="secondary-button auth-open-button" data-provider="google">Add Key</button>
+                      <button type="button" class="secondary-button runtime-logout-button hidden" data-runtime="gemini">Logout</button>
+                      <button type="button" class="secondary-button runtime-install-button" data-runtime="gemini">Install</button>
+                    </div>
+                  </div>
+                </article>
+
+              </div>
+            </section>
+
+            <section id="settings-performance" class="settings-panel" role="tabpanel" aria-labelledby="settings-tab-performance" aria-hidden="true" tabindex="0">
+              <div class="panel-header">
+                <div>
+                  <h3>Performance</h3>
+                  <p class="panel-copy">Optional features that can add latency around each turn.</p>
+                </div>
+              </div>
+
+              <div class="settings-block">
+                <div class="settings-block-header">
+                  <div class="connect-title">Performance</div>
+                  <div class="connect-copy">Disable optional work that can add latency around each turn.</div>
+                </div>
+                <div class="settings-field-grid">
+                  <div class="settings-field">
+                    <label class="font-size-label" for="settings-performance-profile">Profile</label>
+                    <select id="settings-performance-profile" class="composer-select settings-select" aria-label="Performance profile">
+                      <option value="fast">Fast</option>
+                      <option value="balanced">Balanced</option>
+                      <option value="full">Full</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="settings-toggle-list">
+                  <label class="settings-toggle-row">
+                    <div>
+                      <div class="settings-toggle-title">Task Breakdown</div>
+                      <div class="connect-copy">Lets the local router break complex `smart` requests into subtasks.</div>
+                    </div>
+                    <input id="settings-enable-task-breakdown" type="checkbox" class="settings-toggle-input" aria-label="Enable task breakdown">
+                  </label>
+                  <label class="settings-toggle-row">
+                    <div>
+                      <div class="settings-toggle-title">Follow-up Suggestions</div>
+                      <div class="connect-copy">Generates suggested next prompts after assistant replies.</div>
+                    </div>
+                    <input id="settings-enable-follow-up-suggestions" type="checkbox" class="settings-toggle-input" aria-label="Enable follow-up suggestions">
+                  </label>
+                </div>
+                <div class="settings-field-grid">
+                  <div class="settings-field">
+                    <label class="font-size-label" for="settings-local-preprocess-model">Local Model</label>
+                    <select id="settings-local-preprocess-model" class="composer-select settings-select" aria-label="Local model">
+                      <option value="">Off</option>
+                    </select>
+                    <div class="settings-field-actions">
+                      <button type="button" class="secondary-button" id="settings-install-local-preprocess-model">Install Selected</button>
+                      <div class="connect-copy" id="settings-local-preprocess-model-status">Pick a local model or leave it off.</div>
+                    </div>
+                    <div class="connect-copy">Choose the local model BetterCode should use. If nothing is selected, local routing stays off.</div>
+                  </div>
+                </div>
+                <div class="settings-field-grid">
+                  <div class="settings-field">
+                    <label class="font-size-label" for="settings-auto-model-budget">Auto Select Budget</label>
+                    <select id="settings-auto-model-budget" class="composer-select settings-select" aria-label="Auto Model Select budget">
+                      <option value="">No cap</option>
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                    </select>
+                    <div class="connect-copy">Caps auto-selection to models at or below this cost tier when possible.</div>
+                  </div>
+                  <div class="settings-field">
+                    <label class="font-size-label" for="settings-auto-model-preference">Auto Select Preference</label>
+                    <select id="settings-auto-model-preference" class="composer-select settings-select" aria-label="Auto Model Select preference">
+                      <option value="balanced">Balanced</option>
+                      <option value="cheaper">Cheaper</option>
+                      <option value="faster">Faster</option>
+                      <option value="smarter">Smarter</option>
+                    </select>
+                    <div class="connect-copy">Balanced is the default. Use this to bias auto-selection without forcing one model.</div>
+                  </div>
+                </div>
+              </div>
+
+              <!--
+              <div class="settings-block">
+                <div class="settings-block-header">
+                  <div class="connect-title">Recovery & Diagnostics</div>
+                  <div class="connect-copy">Retry the last turn for the current project, restart Auto Model Select, and inspect recent telemetry.</div>
+                </div>
+                <div class="settings-action-row">
+                  <button type="button" class="secondary-button" id="settings-retry-last-turn">Retry Last Turn</button>
+                  <button type="button" class="secondary-button" id="settings-restart-selector">Restart Auto Select</button>
+                  <button type="button" class="secondary-button" id="settings-open-telemetry">Open Telemetry Log</button>
+                  <button type="button" class="secondary-button" id="settings-refresh-telemetry">Refresh Telemetry</button>
+                </div>
+                <div id="settings-diagnostics-panel" class="settings-diagnostics-panel"></div>
+              </div>
+              -->
+            </section>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Context menus -->
+  <div id="run-settings-panel" class="run-settings-panel hidden">
+    <div class="run-settings-panel-header">
+      <span class="run-settings-panel-title">Run Settings</span>
+      <button type="button" class="icon-button" id="run-settings-close" aria-label="Close run settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <p class="run-settings-note">Suggested by local agent processing. Remove or add any variables your project needs.</p>
+    <div id="run-settings-fields" class="run-settings-fields"></div>
+    <button type="button" class="run-settings-add-btn" id="run-settings-add">+ Add Variable</button>
+    <div class="run-settings-actions">
+      <button type="button" class="secondary-button" id="run-settings-cancel">Cancel</button>
+      <button type="button" class="primary-button" id="run-settings-save">Save</button>
+    </div>
+  </div>
+  <div id="workspace-menu" class="menu hidden"></div>
+  <div id="generated-files-menu" class="menu generated-files-menu hidden"></div>
+  <div id="project-add-menu" class="menu hidden">
+    <button type="button" data-project-add-action="import">Import Project</button>
+    <button type="button" data-project-add-action="create">Create Project</button>
+  </div>
+  <div id="git-menu" class="menu hidden">
+    <button type="button" data-git-menu-action="fetch">Fetch</button>
+    <button type="button" data-git-menu-action="pull">Pull</button>
+    <button type="button" data-git-menu-action="update">Update</button>
+    <button type="button" data-git-menu-action="push">Push</button>
+    <button type="button" data-git-menu-action="stage-all">Stage All</button>
+    <button type="button" data-git-menu-action="unstage-all">Unstage All</button>
+  </div>
+
+  <!-- Dialogs -->
+  <dialog id="auth-dialog" class="dialog">
+    <form method="dialog" class="dialog-shell" id="auth-dialog-form">
+      <div class="dialog-header">
+        <div>
+          <div class="topbar-label">Provider</div>
+          <h3 id="auth-dialog-title">Connect</h3>
+        </div>
+        <button type="button" class="icon-button" id="auth-dialog-close" aria-label="Close dialog"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <p class="panel-copy" id="auth-dialog-copy">Save a provider key for desktop usage.</p>
+      <input id="auth-dialog-input" type="password" autocomplete="off" placeholder="API key">
+      <div class="dialog-actions">
+        <button type="button" class="secondary-button" id="auth-dialog-cancel">Cancel</button>
+        <button type="submit" class="primary-button">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="account-dialog" class="dialog">
+    <form method="dialog" class="dialog-shell" id="account-dialog-form">
+      <div class="dialog-header">
+        <div>
+          <div class="topbar-label">Runtime</div>
+          <h3 id="account-dialog-title">Login</h3>
+        </div>
+        <button type="button" class="icon-button" id="account-dialog-close" aria-label="Close dialog"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <p class="panel-copy" id="account-dialog-copy">Run the runtime login flow, then refresh status.</p>
+      <div class="settings-block">
+        <div class="settings-block-header">
+          <div class="connect-title">Command</div>
+          <div class="connect-copy" id="account-dialog-command">codex login</div>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="secondary-button" id="account-dialog-cancel">Close</button>
+        <button type="submit" class="primary-button">Refresh Status</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="rename-dialog" class="dialog">
+    <form method="dialog" class="dialog-shell" id="rename-dialog-form">
+      <div class="dialog-header">
+        <div>
+          <div class="topbar-label">Project</div>
+          <h3>Rename project</h3>
+        </div>
+        <button type="button" class="icon-button" id="rename-dialog-close" aria-label="Close dialog"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <input id="rename-dialog-input" autocomplete="off" placeholder="Project name">
+      <div class="dialog-actions">
+        <button type="button" class="secondary-button" id="rename-dialog-cancel">Cancel</button>
+        <button type="submit" class="primary-button">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="project-trust-dialog" class="dialog">
+    <form method="dialog" class="dialog-shell" id="project-trust-form">
+      <div class="dialog-header">
+        <div>
+          <div class="topbar-label">Project Access</div>
+          <h3>Trust this project</h3>
+        </div>
+        <button type="button" class="icon-button" id="project-trust-close" aria-label="Close dialog"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="settings-block">
+        <div class="settings-block-header">
+          <div class="connect-title" id="project-trust-name">Project</div>
+          <div class="connect-copy" id="project-trust-path"></div>
+        </div>
+      </div>
+      <p class="panel-copy">BetterCode will be able to read this directory, inspect its files, and run project actions inside it. Only continue if you trust this project and its contents.</p>
+      <div class="dialog-actions">
+        <button type="button" class="secondary-button" id="project-trust-cancel">Cancel</button>
+        <button type="submit" class="primary-button">Trust Project</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="create-project-dialog" class="dialog">
+    <form method="dialog" class="dialog-shell" id="create-project-form">
+      <div class="dialog-header">
+        <div>
+          <div class="topbar-label">Project</div>
+          <h3>Create project</h3>
+        </div>
+        <button type="button" class="icon-button" id="create-project-close" aria-label="Close dialog"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="settings-block">
+        <div class="settings-block-header">
+          <div class="connect-title">Save Location</div>
+          <div class="connect-copy" id="create-project-parent-path"></div>
+        </div>
+      </div>
+      <input id="create-project-input" autocomplete="off" placeholder="Project name">
+      <div class="dialog-actions">
+        <button type="button" class="secondary-button" id="create-project-cancel">Cancel</button>
+        <button type="submit" class="primary-button">Create Project</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="run-dialog" class="dialog">
+    <div class="dialog-shell run-dialog-shell">
+      <div class="dialog-header">
+        <div>
+          <div class="topbar-label">Project</div>
+          <h3 id="run-dialog-title">Run Project</h3>
+        </div>
+        <div class="inline-actions">
+          <button type="button" class="icon-button hidden" id="run-minimize-button" aria-label="Minimize to topbar"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <button type="button" class="icon-button" id="run-dialog-close" aria-label="Close dialog"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+
+      <div id="run-phase-detecting" class="run-phase">
+        <p class="panel-copy">Analyzing project to detect run configuration…</p>
+      </div>
+
+      <div id="run-phase-ready" class="run-phase hidden">
+        <div id="run-prereqs-section" class="hidden">
+          <div class="settings-block-header">
+            <div class="connect-title">Setup Required</div>
+          </div>
+          <div id="run-prereqs-list" class="run-prereqs-list"></div>
+        </div>
+        <div class="settings-block">
+          <div class="settings-block-header">
+            <div class="connect-title">Command</div>
+            <div class="connect-copy" id="run-detected-from"></div>
+          </div>
+          <input id="run-command-input" autocomplete="off" placeholder="e.g. npm run dev">
+        </div>
+        <div id="run-env-section" class="hidden">
+          <div class="settings-block-header">
+            <div class="connect-title">Required Variables</div>
+          </div>
+          <div id="run-env-fields" class="run-env-fields"></div>
+        </div>
+        <div class="dialog-actions">
+          <button type="button" class="secondary-button" id="run-cancel-button">Cancel</button>
+          <button type="button" class="primary-button" id="run-start-button">Start</button>
+        </div>
+      </div>
+
+      <div id="run-phase-output" class="run-phase hidden">
+        <div id="run-terminal" class="run-terminal"></div>
+        <div id="run-exit-status" class="run-exit-status hidden"></div>
+        <div class="dialog-actions">
+          <button type="button" class="primary-button hidden" id="run-done-button">Close</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="tab-history-dialog" class="dialog">
+    <div class="dialog-shell">
+      <div class="dialog-header">
+        <div>
+          <div class="topbar-label">Tabs</div>
+          <h3>Tab History</h3>
+        </div>
+        <button type="button" class="icon-button" id="tab-history-close" aria-label="Close dialog"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <p class="panel-copy">Closed tabs stay here until you restore them.</p>
+      <div id="tab-history-list" class="tab-history-list"></div>
+      <div class="dialog-actions">
+        <button type="button" class="secondary-button" id="tab-history-cancel">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="local-model-install-dialog" class="dialog">
+    <div class="dialog-shell">
+      <div class="dialog-header">
+        <div>
+          <div class="topbar-label">Local Model</div>
+          <h3 id="local-model-install-dialog-title">Install Model</h3>
+        </div>
+        <button type="button" class="icon-button" id="local-model-install-dialog-close" aria-label="Close dialog"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="panel-copy" id="local-model-install-dialog-copy"></div>
+      <div class="dialog-actions">
+        <button type="button" class="secondary-button" id="local-model-install-dialog-cancel">Cancel</button>
+        <button type="button" class="primary-button" id="local-model-install-dialog-install">Install</button>
+        <button type="button" class="primary-button hidden" id="local-model-install-dialog-activate">Activate</button>
+      </div>
+    </div>
+  </dialog>
+
+  <section id="onboarding-overlay" class="onboarding-overlay hidden" aria-hidden="true">
+    <div class="onboarding-shell">
+      <div class="onboarding-card">
+        <button type="button" class="icon-button onboarding-close-button" id="onboarding-close-button" aria-label="Close window">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div class="onboarding-copy-panel">
+          <div class="onboarding-topline">
+            <div class="onboarding-kicker" id="onboarding-kicker">Welcome</div>
+            <div class="onboarding-progress" id="onboarding-progress">1 / 3</div>
+          </div>
+          <h2 id="onboarding-title">Select your human language</h2>
+          <p id="onboarding-copy" class="onboarding-copy"></p>
+          <div id="onboarding-body" class="onboarding-body"></div>
+          <div class="onboarding-actions">
+            <button type="button" class="secondary-button hidden" id="onboarding-back">Back</button>
+            <button type="button" class="primary-button" id="onboarding-next">Continue</button>
+          </div>
+        </div>
+        <div class="onboarding-visual-panel">
+          <div class="onboarding-brand-mark">
+            <img src="/assets/app-icon-light.svg" class="onboarding-brand-icon" data-theme-logo width="54" height="54" alt="" aria-hidden="true">
+            <div>
+              <div class="onboarding-brand-name">BetterCode</div>
+              <div class="onboarding-brand-copy" id="onboarding-brand-copy">Local-first coding workspace</div>
+            </div>
+          </div>
+          <div id="onboarding-visual" class="onboarding-visual"></div>
+          <div id="onboarding-stepper" class="onboarding-stepper" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Custom window controls (platform placement is handled in app.js) -->
+  <div id="window-controls" class="window-controls" aria-hidden="true">
+    <button class="wc-btn wc-minimize" id="wc-minimize" tabindex="-1" aria-label="Minimize">
+      <svg width="10" height="1" viewBox="0 0 10 1" fill="none" aria-hidden="true"><rect width="10" height="1" fill="currentColor"/></svg>
+    </button>
+    <button class="wc-btn wc-maximize" id="wc-maximize" tabindex="-1" aria-label="Maximize">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><rect x="0.5" y="0.5" width="9" height="9" stroke="currentColor"/></svg>
+    </button>
+    <button class="wc-btn wc-close" id="wc-close" tabindex="-1" aria-label="Close">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><line x1="0" y1="0" x2="10" y2="10" stroke="currentColor" stroke-width="1.2"/><line x1="10" y1="0" x2="0" y2="10" stroke="currentColor" stroke-width="1.2"/></svg>
+    </button>
+  </div>
+
+  <!-- Full Codebase Review confirmation modal -->
+  <div id="full-review-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="full-review-modal-title">
+    <div class="modal-box">
+      <h2 class="modal-title" id="full-review-modal-title">Full Codebase Review</h2>
+      <p class="modal-body">This will review <strong id="full-review-file-count">all files</strong> in your codebase.</p>
+      <ul class="modal-warning-list">
+        <li>This may use a significant amount of tokens.</li>
+        <li>It may take a long time to complete.</li>
+        <li>Keep BetterCode open while the review is running — if you close it, results will be lost.</li>
+      </ul>
+      <div class="modal-actions">
+        <button type="button" class="secondary-button" id="full-review-cancel">Cancel</button>
+        <button type="button" class="primary-button" id="full-review-confirm">Start Full Review</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/xterm.js"></script>
+  <script src="/assets/addon-fit.js"></script>
+  <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
