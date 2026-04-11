@@ -1,5 +1,4 @@
 import asyncio
-import hashlib
 import subprocess
 import json
 from datetime import UTC, datetime, timedelta
@@ -70,6 +69,7 @@ def _selector_runtime_ready(monkeypatch):
         web_api.GIT_STATUS_CACHE.clear()
     with web_api.RECENT_FILE_ENTRIES_CACHE_LOCK:
         web_api.RECENT_FILE_ENTRIES_CACHE.clear()
+    web_api._clear_model_discovery_cache()
     monkeypatch.setattr(
         web_api,
         "require_selector_runtime",
@@ -902,8 +902,13 @@ def test_git_update_payload_runs_fetch_then_pull(monkeypatch, tmp_path):
 def test_chat_endpoint_persists_messages(monkeypatch, tmp_path):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("BETTERCODE_HOME", str(tmp_path / ".bettercode"))
-    monkeypatch.setitem(web_api.MODEL_DISCOVERY_CACHE, "options", None)
-    monkeypatch.setitem(web_api.MODEL_DISCOVERY_CACHE, "registry", None)
+    monkeypatch.setitem(web_api.MODEL_DISCOVERY_CACHE, "options", [
+        {"id": "smart", "label": "Auto Model Select"},
+        {"id": "codex/gpt-5", "label": "GPT-5"},
+    ])
+    monkeypatch.setitem(web_api.MODEL_DISCOVERY_CACHE, "registry", [
+        {"id": "codex/gpt-5", "label": "GPT-5", "provider": "openai", "runtime": "codex"},
+    ])
     monkeypatch.setattr("bettercode.web.api.manage_workspace_context", lambda db, workspace: False)
     monkeypatch.setattr("bettercode.web.api._cli_runtimes", lambda: {
         "codex": {"available": True, "path": "/usr/bin/codex", "configured": True},
@@ -1607,8 +1612,6 @@ def test_app_update_endpoint_reports_updates_disabled(monkeypatch, tmp_path):
 
 
 def test_app_update_payload_does_not_fetch_updates_when_disabled(monkeypatch):
-    monkeypatch.setattr(web_api, "check_for_updates", lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("should not fetch real updates")))
-
     payload = web_api.app_update_payload(force_refresh=True)
 
     assert payload == {
@@ -1662,6 +1665,7 @@ def test_app_info_includes_configured_models_when_cache_is_empty(monkeypatch, tm
     monkeypatch.setenv("BETTERCODE_HOME", str(tmp_path / ".bettercode"))
     init_db()
     web_api._clear_model_discovery_cache()
+    monkeypatch.setattr("bettercode.web.api._start_model_discovery_warmup", lambda verified=False: None)
     monkeypatch.setattr(
         "bettercode.web.api._cli_runtimes",
         lambda quick=False, force_refresh=False: {

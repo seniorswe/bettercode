@@ -4,11 +4,11 @@ import os
 import threading
 from pathlib import Path
 
-_logger = logging.getLogger(__name__)
-
 from bettercode.app_meta import bettercode_home_dir
 from bettercode.i18n import detect_system_human_language, normalize_human_language
 from bettercode.updater import normalize_version_tag
+
+_logger = logging.getLogger(__name__)
 
 
 COST_TIER_ORDER = ("low", "medium", "high")

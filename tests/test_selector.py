@@ -1,6 +1,13 @@
 import json
 
+import pytest
+
 from bettercode.router import selector
+
+
+@pytest.fixture(autouse=True)
+def _local_preprocess_enabled(monkeypatch):
+    monkeypatch.setattr("bettercode.router.selector.get_local_preprocess_mode", lambda: "tiny")
 
 
 def test_selector_status_reports_missing_ollama(monkeypatch):
@@ -322,6 +329,7 @@ def test_top_candidates_preserve_cross_provider_mix():
 
 
 def test_select_best_model_local_router_prompt_uses_task_fit_metadata(monkeypatch):
+    monkeypatch.setattr("bettercode.router.selector.get_local_preprocess_mode", lambda: "small")
     monkeypatch.setattr("bettercode.router.selector.ensure_selector_runtime", lambda **kwargs: {
         "installed": True,
         "running": True,
@@ -577,6 +585,7 @@ def test_select_best_model_uses_intent_gate_for_simple_requests(monkeypatch):
 
 
 def test_plan_subtasks_skips_local_breakdown_for_simple_requests(monkeypatch):
+    monkeypatch.setattr("bettercode.router.selector.get_local_preprocess_mode", lambda: "small")
     monkeypatch.setattr(
         "bettercode.router.selector.ensure_selector_runtime",
         lambda **kwargs: (_ for _ in ()).throw(AssertionError("planner should be skipped")),
@@ -691,6 +700,7 @@ def test_suggest_follow_up_recommendations_filters_ui_instructions_for_questions
 
 
 def test_suggest_follow_up_recommendations_uses_full_reply_and_allows_custom_prompt(monkeypatch):
+    monkeypatch.setattr("bettercode.router.selector.get_local_preprocess_mode", lambda: "small")
     monkeypatch.setattr("bettercode.router.selector.ensure_selector_runtime", lambda **kwargs: {
         "installed": True,
         "running": True,
@@ -721,6 +731,7 @@ def test_suggest_follow_up_recommendations_uses_full_reply_and_allows_custom_pro
 
 
 def test_plan_subtasks_fallback_includes_stage_metadata(monkeypatch):
+    monkeypatch.setattr("bettercode.router.selector.get_local_preprocess_mode", lambda: "small")
     monkeypatch.setattr("bettercode.router.selector.ensure_selector_runtime", lambda **kwargs: {
         "installed": False,
         "running": False,
@@ -741,6 +752,7 @@ def test_plan_subtasks_fallback_includes_stage_metadata(monkeypatch):
 
 
 def test_plan_subtasks_normalizes_local_router_stage_and_model(monkeypatch):
+    monkeypatch.setattr("bettercode.router.selector.get_local_preprocess_mode", lambda: "small")
     monkeypatch.setattr("bettercode.router.selector.ensure_selector_runtime", lambda **kwargs: {
         "installed": True,
         "running": True,
@@ -797,6 +809,7 @@ def test_plan_subtasks_normalizes_local_router_stage_and_model(monkeypatch):
 
 
 def test_plan_subtasks_distributes_tracks_across_multiple_models(monkeypatch):
+    monkeypatch.setattr("bettercode.router.selector.get_local_preprocess_mode", lambda: "small")
     monkeypatch.setattr("bettercode.router.selector.ensure_selector_runtime", lambda **kwargs: {
         "installed": True,
         "running": True,
